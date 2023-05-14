@@ -407,10 +407,16 @@ int main(int argc, char *argv[]) {
     // Go over all user folders in this folder
     struct dirent *entry;
     while ((entry = readdir(main_dir)) != NULL) { //until end of main directory
+        write(1, entry->d_name, strlen(entry->d_name));
+        write(1, "1\n", 2);
+        
         // Ignore hidden files and folders, current and parent dirs
         if (entry->d_name[0] == '.' || !strcmp(entry->d_name, "..")) {
             continue;
         }
+        
+        write(1, entry->d_name, strlen(entry->d_name));
+        write(1, "2\n", 2);
 
         // Generate full path for folder
         char full_entry_path[200];
@@ -433,9 +439,6 @@ int main(int argc, char *argv[]) {
         if(!S_ISDIR(folder_stat.st_mode)){
             continue;
         }
-        
-        write(1, entry->d_name, strlen(entry->d_name));
-        write(1, "\n", 1);
 
         // Open the user folder
         DIR *user_dir = opendir(full_entry_path);
@@ -456,6 +459,7 @@ int main(int argc, char *argv[]) {
         while ((user_entry = readdir(user_dir)) != NULL) {
             write(1, "in loop\n", 9);
             write(1, user_entry->d_name, strlen(user_entry->d_name));
+            write(1, "\n", 1);
             if (user_entry->d_type == DT_REG) { // check if the entry is a regular file
                 const char* file_name = user_entry->d_name;
                 const size_t name_len = strlen(file_name);
