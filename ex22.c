@@ -407,8 +407,6 @@ int main(int argc, char *argv[]) {
     // Go over all user folders in this folder
     struct dirent *entry;
     while ((entry = readdir(main_dir)) != NULL) { //until end of main directory
-        write(1, entry->d_name, strlen(entry->d_name));
-        write(1, "1\n", 2);
         
         // Ignore hidden files and folders, current and parent dirs
         if (entry->d_name[0] == '.' || !strcmp(entry->d_name, "..")) {
@@ -416,7 +414,7 @@ int main(int argc, char *argv[]) {
         }
         
         write(1, entry->d_name, strlen(entry->d_name));
-        write(1, "2\n", 2);
+        write(1, "22222222222222\n", 15);
 
         // Generate full path for folder
         char full_entry_path[200];
