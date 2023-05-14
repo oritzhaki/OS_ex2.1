@@ -566,14 +566,14 @@ int main(int argc, char *argv[]) {
 
 
         // delete output file
-        if (remove("output.txt") == -1) {
-            close(results_fd);
-            close(errors_fd);
-            closedir(main_dir);
-            if ((write(2, "Error in: remove\n", 17)) == -1)
-                return -1;
-            return -1;
-        }
+//         if (remove("output.txt") == -1) {
+//             close(results_fd);
+//             close(errors_fd);
+//             closedir(main_dir);
+//             if ((write(2, "Error in: remove\n", 17)) == -1)
+//                 return -1;
+//             return -1;
+//         }
     }
     //delete out file
     if (remove("tempuser.out") == -1) {
