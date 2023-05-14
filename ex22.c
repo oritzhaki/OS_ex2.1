@@ -433,6 +433,9 @@ int main(int argc, char *argv[]) {
         if(!S_ISDIR(folder_stat.st_mode)){
             continue;
         }
+        
+        write(1, entry->d_name, strlen(entry->d_name));
+        write(1, "\n", 1);
 
         // Open the user folder
         DIR *user_dir = opendir(full_entry_path);
