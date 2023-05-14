@@ -323,22 +323,22 @@ int main(int argc, char *argv[]) {
     close(conf_fd);
 
     // Check and fix paths
-   char temp_path[200];
-   if (!is_absolute_path(folder_path)){
-       strcpy(temp_path, argv[1]);
-       get_full_path(temp_path, folder_path);
-       strcpy(folder_path, temp_path);
-   }
-   if (!is_absolute_path(input_path)){
-       strcpy(temp_path, argv[1]);
-       get_full_path(temp_path, input_path);
-       strcpy(input_path, temp_path);
-   }
-   if (!is_absolute_path(correct_output_path)){
-       strcpy(temp_path, argv[1]);
-       get_full_path(temp_path, correct_output_path);
-       strcpy(correct_output_path, temp_path);
-   }
+//    char temp_path[200];
+//    if (!is_absolute_path(folder_path)){
+//        strcpy(temp_path, argv[1]);
+//        get_full_path(temp_path, folder_path);
+//        strcpy(folder_path, temp_path);
+//    }
+//    if (!is_absolute_path(input_path)){
+//        strcpy(temp_path, argv[1]);
+//        get_full_path(temp_path, input_path);
+//        strcpy(input_path, temp_path);
+//    }
+//    if (!is_absolute_path(correct_output_path)){
+//        strcpy(temp_path, argv[1]);
+//        get_full_path(temp_path, correct_output_path);
+//        strcpy(correct_output_path, temp_path);
+//    }
 
     // Check if folder exists for first path
     struct stat folder_stat;
