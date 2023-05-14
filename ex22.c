@@ -13,6 +13,7 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/time.h>
+#include <sys/resource.h>
 
 int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results_fd) {
     int pid = fork();
