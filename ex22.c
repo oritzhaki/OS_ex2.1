@@ -451,6 +451,8 @@ int main(int argc, char *argv[]) {
         char c_file[300];
         struct dirent *user_entry;
         while ((user_entry = readdir(user_dir)) != NULL) {
+            write(1, "in loop\n", 9);
+            write(1, user_entry->d_name, strlen(user_entry->d_name);
             if (user_entry->d_type == DT_REG) { // check if the entry is a regular file
                 const char* file_name = user_entry->d_name;
                 const size_t name_len = strlen(file_name);
@@ -465,7 +467,7 @@ int main(int argc, char *argv[]) {
             }
         }
         if (c_flag){//no c file, move on to other user
-            write(1, "in if", 5);
+            write(1, "in if\n", 6);
             char full_result[150];
             memset(full_result, 0, sizeof(full_result));
             strcpy(full_result, entry->d_name);
