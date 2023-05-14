@@ -452,7 +452,7 @@ int main(int argc, char *argv[]) {
         struct dirent *user_entry;
         while ((user_entry = readdir(user_dir)) != NULL) {
             write(1, "in loop\n", 9);
-            write(1, user_entry->d_name, strlen(user_entry->d_name);
+            write(1, user_entry->d_name, strlen(user_entry->d_name));
             if (user_entry->d_type == DT_REG) { // check if the entry is a regular file
                 const char* file_name = user_entry->d_name;
                 const size_t name_len = strlen(file_name);
