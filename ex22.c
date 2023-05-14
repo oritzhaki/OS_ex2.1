@@ -464,7 +464,8 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-        if (c_flag || (user_entry == NULL)){//no c file, move on to other user
+        if (c_flag){//no c file, move on to other user
+            write(1, "in if", 5);
             char full_result[150];
             memset(full_result, 0, sizeof(full_result));
             strcpy(full_result, entry->d_name);
