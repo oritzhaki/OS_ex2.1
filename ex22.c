@@ -18,7 +18,7 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
     if (pid == -1) {
         close(errors_fd);
         close(results_fd);
-        //closedir(main_dir);
+        closedir(main_dir);
         if (write(1, "Error in: fork\n", 15) == -1){
             return -1;
         }
@@ -28,7 +28,7 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
         if (dup2(errors_fd, STDERR_FILENO) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             if (write(1, "Error in: dup2\n", 15) == -1){
                 return -1;
             }
@@ -40,7 +40,7 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
         if (execvp(argv[0], argv) == -1) { // gcc failed so no out file was created, not compilation error
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             if (write(1, "Error in: execvp\n", 17) == -1){
                 return -1;
             }
@@ -51,7 +51,7 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
         if (wait(&status) == -1){
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             if (write(1, "Error in: wait\n", 15) == -1){
                 return -1;; // move on to other user
             }
@@ -69,7 +69,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
     if (output_fd == -1) {
         close(errors_fd);
         close(results_fd);
-//         closedir(main_dir);
+        closedir(main_dir);
         if (write(1, "Error in: open\n", 15) == -1) {
             return -1;
         }
@@ -81,7 +81,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
     if (input_fd == -1) {
         close(errors_fd);
         close(results_fd);
-//         closedir(main_dir);
+        closedir(main_dir);
         close(output_fd);
         if (write(1, "Error in: open\n", 15) == -1) {
             return -1;
@@ -97,7 +97,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
     if (pid == -1) {
         close(errors_fd);
         close(results_fd);
-//         closedir(main_dir);
+        closedir(main_dir);
         close(output_fd);
         close(input_fd);
         if (write(1, "Error in: fork\n", 15) == -1) {
@@ -109,7 +109,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         if (dup2(input_fd, STDIN_FILENO) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: dup2\n", 15) == -1) {
@@ -122,7 +122,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         if (dup2(output_fd, STDOUT_FILENO) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: dup2\n", 15) == -1) {
@@ -135,7 +135,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         if (dup2(errors_fd, STDERR_FILENO) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: dup2\n", 15) == -1) {
@@ -149,7 +149,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         if (execvp(argv[0], argv) == -1) { // gcc failed
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: execvp\n", 17) == -1) {
@@ -183,7 +183,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
             } else { // check if child process ended with error
                 close(errors_fd);
                 close(results_fd);
-//                 closedir(main_dir);
+                closedir(main_dir);
                 close(output_fd);
                 close(input_fd);
                 if (write(1, "Error in: wait\n", 15) == -1) {
@@ -201,7 +201,7 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
     if (pid == -1) {
         close(errors_fd);
         close(results_fd);
-//         closedir(main_dir);
+        closedir(main_dir);
         if (write(1, "Error in: fork\n", 15) == -1) {
             return -1;
         }
@@ -211,7 +211,7 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
         if (dup2(errors_fd, STDERR_FILENO) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             if (write(1, "Error in: dup2\n", 15) == -1){
                 return -1;
             }
@@ -223,7 +223,7 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
         if (execvp(argv[0], argv) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             if (write(1, "Error in: execvp\n", 17) == -1) {
                 return -1;
             }
@@ -234,7 +234,7 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
         if ((wait(&status)) == -1) {
             close(errors_fd);
             close(results_fd);
-//             closedir(main_dir);
+            closedir(main_dir);
             if (write(1, "Error in: wait\n", 15) == -1) {
                 return -1; // move on to other user
             }
@@ -416,168 +416,166 @@ int main(int argc, char *argv[]) {
         write(1, entry->d_name, strlen(entry->d_name));
         write(1, "22222222222222\n", 15);
 
-//         // Generate full path for folder
-//         char full_entry_path[200];
-//         memset(full_entry_path, 0, sizeof(full_entry_path));
-//         strcpy(full_entry_path, folder_path);
-//         strcat(full_entry_path, "/");
-//         strcat(full_entry_path, entry->d_name);
+        // Generate full path for folder
+        char full_entry_path[200];
+        memset(full_entry_path, 0, sizeof(full_entry_path));
+        strcpy(full_entry_path, folder_path);
+        strcat(full_entry_path, "/");
+        strcat(full_entry_path, entry->d_name);
 
-//         // Check if the entry is a directory
-//         // note: if the path doesnt exist in the system, S_ISDIR may still confirm as a folder, therefore the use of stat here.
-//         if (stat(full_entry_path, &folder_stat) == -1) {
-//             close(results_fd);
-//             close(errors_fd);
-// //             closedir(main_dir);
-//             if (write(1, "Error in: stat\n", 15) == -1){
-//                 return -1;
-//             }
-//             /// return or exit or continue?
-//         }
-//         if(!S_ISDIR(folder_stat.st_mode)){
-//             continue;
-//         }
+        // Check if the entry is a directory
+        // note: if the path doesnt exist in the system, S_ISDIR may still confirm as a folder, therefore the use of stat here.
+        if (stat(full_entry_path, &folder_stat) == -1) {
+            close(results_fd);
+            close(errors_fd);
+            closedir(main_dir);
+            if (write(1, "Error in: stat\n", 15) == -1){
+                return -1;
+            }
+            /// return or exit or continue?
+        }
+        if(!S_ISDIR(folder_stat.st_mode)){
+            continue;
+        }
 
-//         // Open the user folder
-//         DIR *user_dir = opendir(full_entry_path);
-//         if (user_dir == NULL) {
-//             close(results_fd);
-//             close(errors_fd);
-// //             closedir(main_dir);
-//             if (write(1, "Error in: opendir\n", 18) == -1){
-//                 return -1;
-//             }
-//             /// return or exit or continue?
-//         }
+        // Open the user folder
+        DIR *user_dir = opendir(full_entry_path);
+        if (user_dir == NULL) {
+            close(results_fd);
+            close(errors_fd);
+            closedir(main_dir);
+            if (write(1, "Error in: opendir\n", 18) == -1){
+                return -1;
+            }
+            /// return or exit or continue?
+        }
 
-//         // Check if the directory found contains a C file
-//         int c_flag = 1;
-//         char c_file[300];
-//         struct dirent *user_entry;
-//         while ((user_entry = readdir(user_dir)) != NULL) {
-//             write(1, "in loop\n", 9);
-//             write(1, user_entry->d_name, strlen(user_entry->d_name));
-//             write(1, "\n", 1);
-//             if (user_entry->d_type == DT_REG) { // check if the entry is a regular file
-//                 const char* file_name = user_entry->d_name;
-//                 const size_t name_len = strlen(file_name);
-//                 if (name_len >= 2 && strcmp(file_name + name_len - 2, ".c") == 0) {
-//                     memset(c_file, 0, sizeof(c_file));
-//                     strcpy(c_file, full_entry_path);
-//                     strcat(c_file, "/");
-//                     strcat(c_file,file_name);
-//                     c_flag = 0;
-//                     break; // c file found
-//                 }
-//             }
-//         }
-//         if (c_flag){//no c file, move on to other user
-//             write(1, "in if\n", 6);
-//             char full_result[150];
-//             memset(full_result, 0, sizeof(full_result));
-//             strcpy(full_result, entry->d_name);
-//             strcat(full_result, ",0,NO_C_FILE\n");
-//             if (write(results_fd, full_result, strlen(full_result)) == -1) {
-//                 close(results_fd);
-//                 close(errors_fd);
-// //                 closedir(main_dir);
-//                 closedir(user_dir);
-//                 return -1;
-//             }
-//             continue;
-//         }
+        // Check if the directory found contains a C file
+        int c_flag = 1;
+        char c_file[300];
+        struct dirent *user_entry;
+        while ((user_entry = readdir(user_dir)) != NULL) {
+            write(1, "in loop\n", 9);
+            write(1, user_entry->d_name, strlen(user_entry->d_name));
+            write(1, "\n", 1);
+            if (user_entry->d_type == DT_REG) { // check if the entry is a regular file
+                const char* file_name = user_entry->d_name;
+                const size_t name_len = strlen(file_name);
+                if (name_len >= 2 && strcmp(file_name + name_len - 2, ".c") == 0) {
+                    memset(c_file, 0, sizeof(c_file));
+                    strcpy(c_file, full_entry_path);
+                    strcat(c_file, "/");
+                    strcat(c_file,file_name);
+                    c_flag = 0;
+                    break; // c file found
+                }
+            }
+        }
+        if (c_flag){//no c file, move on to other user
+            write(1, "in if\n", 6);
+            char full_result[150];
+            memset(full_result, 0, sizeof(full_result));
+            strcpy(full_result, entry->d_name);
+            strcat(full_result, ",0,NO_C_FILE\n");
+            if (write(results_fd, full_result, strlen(full_result)) == -1) {
+                close(results_fd);
+                close(errors_fd);
+                closedir(main_dir);
+                closedir(user_dir);
+                return -1;
+            }
+            continue;
+        }
 
-//         //close user folder
-//         closedir(user_dir);
+        //close user folder
+        closedir(user_dir);
 
-//         // Compile the user program
-//         //int outcome = compile_user_program(main_dir, c_file, errors_fd, results_fd);
-//         int outcome = 0;
-//         if (outcome) {
-//             char full_result[150];
-//             memset(full_result, 0, sizeof(full_result));
-//             strcpy(full_result, entry->d_name);
-//             strcat(full_result, ",10,COMPILATION_ERROR\n");
-//             if (write(results_fd, full_result, strlen(full_result)) == -1) {
-//                 close(results_fd);
-//                 close(errors_fd);
-// //                 closedir(main_dir);
-//                 return -1;
-//             }
-//             continue;
-//         }
+        // Compile the user program
+        int outcome = compile_user_program(main_dir, c_file, errors_fd, results_fd);
+        if (outcome) {
+            char full_result[150];
+            memset(full_result, 0, sizeof(full_result));
+            strcpy(full_result, entry->d_name);
+            strcat(full_result, ",10,COMPILATION_ERROR\n");
+            if (write(results_fd, full_result, strlen(full_result)) == -1) {
+                close(results_fd);
+                close(errors_fd);
+                closedir(main_dir);
+                return -1;
+            }
+            continue;
+        }
 
-//         // Run user program
-//         //outcome = run_user_program(input_path, errors_fd, results_fd, main_dir);
-//         outcome = 1;
-//         if (outcome == -2) {
-//             char full_result[150];
-//             memset(full_result, 0, sizeof(full_result));
-//             strcpy(full_result, entry->d_name);
-//             strcat(full_result, ",20,TIMEOUT\n");
-//             if (write(results_fd, full_result, strlen(full_result)) == -1) {
-//                 close(results_fd);
-//                 close(errors_fd);
-// //                 closedir(main_dir);
-//                 return -1;
-//             }
-//             continue;
-//         }
+        // Run user program
+        outcome = run_user_program(input_path, errors_fd, results_fd, main_dir);
+        if (outcome == -2) {
+            char full_result[150];
+            memset(full_result, 0, sizeof(full_result));
+            strcpy(full_result, entry->d_name);
+            strcat(full_result, ",20,TIMEOUT\n");
+            if (write(results_fd, full_result, strlen(full_result)) == -1) {
+                close(results_fd);
+                close(errors_fd);
+                closedir(main_dir);
+                return -1;
+            }
+            continue;
+        }
 
-//         // Run the compare program to check the users output
-//         //outcome = check_user_output(errors_fd, results_fd, correct_output_path, main_dir);
+        // Run the compare program to check the users output
+        outcome = check_user_output(errors_fd, results_fd, correct_output_path, main_dir);
 
-//         //add to result the correct score
-//         char full_result[150];
-//         memset(full_result, 0, sizeof(full_result));
-//         strcpy(full_result, entry->d_name);
-//         switch (outcome) {
-//             case 1:
-//                 strcat(full_result, ",100,EXCELLENT\n");
-//                 if (write(results_fd, full_result, strlen(full_result)) == -1) {
-//                     close(results_fd);
-//                     close(errors_fd);
-// //                     closedir(main_dir);
-//                     return -1;
-//                 }
-//                 write(1, "in 100!\n", 8);
-//                 break;
-//             case 2:
-//                 strcat(full_result, ",50,WRONG\n");
-//                 if (write(results_fd, full_result, strlen(full_result)) == -1) {
-//                     close(results_fd);
-//                     close(errors_fd);
-// //                     closedir(main_dir);
-//                     return -1;
-//                 }
-//                 break;
-//             case 3:
-//                 strcat(full_result, ",75,SIMILAR\n");
-//                 if (write(results_fd, full_result, strlen(full_result)) == -1) {
-//                     close(results_fd);
-//                     close(errors_fd);
-// //                     closedir(main_dir);
-//                     return -1;
-//                 }
-//                 break;
-//             default:
-// //                close(results_fd);
-// //                close(errors_fd);
-// //                closedir(main_dir);
-//                 break;
-//         }
+        //add to result the correct score
+        char full_result[150];
+        memset(full_result, 0, sizeof(full_result));
+        strcpy(full_result, entry->d_name);
+        switch (outcome) {
+            case 1:
+                strcat(full_result, ",100,EXCELLENT\n");
+                if (write(results_fd, full_result, strlen(full_result)) == -1) {
+                    close(results_fd);
+                    close(errors_fd);
+                    closedir(main_dir);
+                    return -1;
+                }
+                write(1, "in 100!\n", 8);
+                break;
+            case 2:
+                strcat(full_result, ",50,WRONG\n");
+                if (write(results_fd, full_result, strlen(full_result)) == -1) {
+                    close(results_fd);
+                    close(errors_fd);
+                    closedir(main_dir);
+                    return -1;
+                }
+                break;
+            case 3:
+                strcat(full_result, ",75,SIMILAR\n");
+                if (write(results_fd, full_result, strlen(full_result)) == -1) {
+                    close(results_fd);
+                    close(errors_fd);
+                    closedir(main_dir);
+                    return -1;
+                }
+                break;
+            default:
+//                close(results_fd);
+//                close(errors_fd);
+//                closedir(main_dir);
+                break;
+        }
 
         write(1, "after\n", 6);
         
         // delete output file
-//         if (remove("output.txt") == -1) {
-//             close(results_fd);
-//             close(errors_fd);
-// //             closedir(main_dir);
-//             if ((write(2, "Error in: remove\n", 17)) == -1)
-//                 return -1;
-//             return -1;
-//         }
+        if (remove("output.txt") == -1) {
+            close(results_fd);
+            close(errors_fd);
+//             closedir(main_dir);
+            if ((write(2, "Error in: remove\n", 17)) == -1)
+                return -1;
+            return -1;
+        }
         write(1, "end\n", 4);
     }
     //delete out file
