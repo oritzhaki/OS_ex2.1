@@ -491,7 +491,8 @@ int main(int argc, char *argv[]) {
         closedir(user_dir);
 
         // Compile the user program
-        int outcome = compile_user_program(main_dir, c_file, errors_fd, results_fd);
+        //int outcome = compile_user_program(main_dir, c_file, errors_fd, results_fd);
+        int outcome = 0;
         if (outcome) {
             char full_result[150];
             memset(full_result, 0, sizeof(full_result));
@@ -507,7 +508,8 @@ int main(int argc, char *argv[]) {
         }
 
         // Run user program
-        outcome = run_user_program(input_path, errors_fd, results_fd, main_dir);
+        //outcome = run_user_program(input_path, errors_fd, results_fd, main_dir);
+        outcome = 1;
         if (outcome == -2) {
             char full_result[150];
             memset(full_result, 0, sizeof(full_result));
@@ -523,7 +525,7 @@ int main(int argc, char *argv[]) {
         }
 
         // Run the compare program to check the users output
-        outcome = check_user_output(errors_fd, results_fd, correct_output_path, main_dir);
+        //outcome = check_user_output(errors_fd, results_fd, correct_output_path, main_dir);
 
         //add to result the correct score
         char full_result[150];
