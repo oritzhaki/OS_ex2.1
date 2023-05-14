@@ -10,8 +10,6 @@
 #include <fcntl.h>
 #include <time.h>
 #include <dirent.h>
-#include <signal.h>
-#include <stdbool.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 
@@ -22,9 +20,9 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
         close(results_fd);
         closedir(main_dir);
         if (write(1, "Error in: fork\n", 15) == -1){
-            exit(-1);
+            return -1;
         }
-        exit(-1); // move on to other user
+        return -1; // move on to other user
     } else if (pid == 0) { //child
         // redirection of errors:
         if (dup2(errors_fd, STDERR_FILENO) == -1) {
@@ -32,9 +30,9 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
             close(results_fd);
             closedir(main_dir);
             if (write(1, "Error in: dup2\n", 15) == -1){
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
 
         // Execute the gcc command with the given arguments
@@ -44,9 +42,9 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
             close(results_fd);
             closedir(main_dir);
             if (write(1, "Error in: execvp\n", 17) == -1){
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
     } else { //parent
         int status;
@@ -55,14 +53,14 @@ int compile_user_program(DIR* main_dir, char *c_file, int errors_fd, int results
             close(results_fd);
             closedir(main_dir);
             if (write(1, "Error in: wait\n", 15) == -1){
-                exit(-1); // move on to other user
+                return -1;; // move on to other user
             }
-            exit(-1); // move to the next user, child process ended with error
+            return -1;; // move to the next user, child process ended with error
         }
         int i = WEXITSTATUS(status);
         return i;
     }
-    return -2;
+    return -3;
 }
 
 int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_dir) {
@@ -73,9 +71,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         close(results_fd);
         closedir(main_dir);
         if (write(1, "Error in: open\n", 15) == -1) {
-            exit(-1);
+            return -1;
         }
-        exit(-1); // Move on to the next user
+        return -1; // Move on to the next user
     }
 
     // Prepare input file
@@ -86,9 +84,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         closedir(main_dir);
         close(output_fd);
         if (write(1, "Error in: open\n", 15) == -1) {
-            exit(-1);
+            return -1;
         }
-        exit(-1);
+        return -1;
     }
 
     struct rusage usage;
@@ -103,9 +101,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
         close(output_fd);
         close(input_fd);
         if (write(1, "Error in: fork\n", 15) == -1) {
-            exit(-1);
+            return -1;
         }
-        exit(-1);
+        return -1;
     } else if (pid == 0) { //child
         //redirection of inputs:
         if (dup2(input_fd, STDIN_FILENO) == -1) {
@@ -115,9 +113,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: dup2\n", 15) == -1) {
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
 
         //redirection of outputs:
@@ -128,9 +126,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: dup2\n", 15) == -1) {
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
 
         // redirection of errors:
@@ -141,9 +139,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: dup2\n", 15) == -1) {
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
 
         // Run the c program
@@ -155,9 +153,9 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
             close(output_fd);
             close(input_fd);
             if (write(1, "Error in: execvp\n", 17) == -1) {
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
     } else { //parent
         int status;
@@ -180,7 +178,7 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
                     // Child process has been running for more than 5
                     close(output_fd);
                     close(input_fd);
-                    return -1;
+                    return -2;
                 }
             } else { // check if child process ended with error
                 close(errors_fd);
@@ -189,13 +187,13 @@ int run_user_program(char *input_path, int errors_fd, int results_fd, DIR* main_
                 close(output_fd);
                 close(input_fd);
                 if (write(1, "Error in: wait\n", 15) == -1) {
-                    exit(-1);
+                    return -1;
                 }
-                exit(-1);
+                return -1;
             }
         }
     }
-    return -2;
+    return -3;
 }
 
 int check_user_output(int errors_fd, int results_fd, char *correct_output_path, DIR* main_dir) {
@@ -205,9 +203,9 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
         close(results_fd);
         closedir(main_dir);
         if (write(1, "Error in: fork\n", 15) == -1) {
-            exit(-1);
+            return -1;
         }
-        exit(-1);
+        return -1;
     } else if (pid == 0) { //child
         // redirection of errors:
         if (dup2(errors_fd, STDERR_FILENO) == -1) {
@@ -215,9 +213,9 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
             close(results_fd);
             closedir(main_dir);
             if (write(1, "Error in: dup2\n", 15) == -1){
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
 
         //Run comp.out to compare the output
@@ -227,9 +225,9 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
             close(results_fd);
             closedir(main_dir);
             if (write(1, "Error in: execvp\n", 17) == -1) {
-                exit(-1);
+                return -1;
             }
-            exit(-1);
+            return -1;
         }
     } else { //parent
         int status;
@@ -238,14 +236,14 @@ int check_user_output(int errors_fd, int results_fd, char *correct_output_path, 
             close(results_fd);
             closedir(main_dir);
             if (write(1, "Error in: wait\n", 15) == -1) {
-                exit(-1); // move on to other user
+                return -1; // move on to other user
             }
-            exit(-1);
+            return -1;
         }
         int i = WEXITSTATUS(status);
         return i;
     }
-    return -2;
+    return -3;
 }
 
 int is_absolute_path(const char *path) {
@@ -502,7 +500,7 @@ int main(int argc, char *argv[]) {
 
         // Run user program
         outcome = run_user_program(input_path, errors_fd, results_fd, main_dir);
-        if (outcome == -1) {
+        if (outcome == -2) {
             char full_result[150];
             memset(full_result, 0, sizeof(full_result));
             strcpy(full_result, entry->d_name);
